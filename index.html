@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta tags for SEO -->
+    <title>Smart Study Assistant for B.Tech Students</title>
+    <meta name="description" content="A modern, aesthetic study timer and burnout assistant for B.Tech students. Includes Pomodoro timer and study buddy.">
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link to custom stylesheets -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>🧑‍🎓 Smart Study Assistant</h1>
+            <p class="subtitle">For B.Tech Students</p>
+        </div>
+        <!-- FUTURE EXPANSION: Exam planner link, progress dashboard link can go here -->
+    </nav>
+
+    <!-- Main Dashboard Layout -->
+    <main class="dashboard">        
+        <!-- Section 1: Timer Section (Pomodoro Style) -->
+        <section class="card timer-section" id="timer-section">
+            <h2>⏱️ Study Timer</h2>
+            <div class="timer-inputs">
+                <input type="number" id="study-input" placeholder="Study (min)" min="1">
+                <input type="number" id="break-input" placeholder="Break (min)" min="1">
+    </div>
+
+    <div class="timer-display" id="time-display">25:00</div>
+            
+            <div class="timer-controls">
+                 Break (5m)</button>
+                <button id="start-btn" class="btn primary-btn">Start Focus</button>
+                <button id="break-btn" class="btn secondary-btn">Short Break</button>
+                <button id="pause-btn" class="btn warning-btn" aria-label="Pause Timer">Pause</button>
+                <button id="reset-btn" class="btn danger-btn" aria-label="Reset Timer">Reset</button>
+            </div>
+            
+            <div class="progress-info">
+                <p id="session-count" class="metrics-text">Sessions completed: 0</p>
+                <p id="reward-message" class="reward-msg"></p>
+            </div>
+        </section>
+
+        <!-- Section 2: Study Buddy Animation Section -->
+        <section class="card buddy-section" id="buddy-section">
+            <h2>👥 Study Buddy</h2>
+            <!-- FUTURE EXPANSION: Dropdown to select multiple study buddies -->
+            
+            <div class="buddy-container">
+                <!-- Simple CSS placeholder animated avatar mimicking "study with me" -->
+                <div class="buddy-placeholder">
+                    <div class="buddy-avatar" aria-hidden="true">👩‍💻</div>
+                    <div class="buddy-shadow"></div>
+                </div>
+                <p class="buddy-status">Studying quietly with you...</p>
+            </div>
+            
+            <div class="ambience-controls">
+                <h3>Ambience Modes (Coming Soon)</h3>
+                <!-- FUTURE EXPANSION: Actual music/ambience integration -->
+                <div class="ambience-buttons">
+                    <button class="btn accent-btn" onclick="alert('Rain sounds coming in future update!')">🌧️ Rain</button>
+                    <button class="btn accent-btn" onclick="alert('Lo-fi beats coming in future update!')">🎧 Lo-fi</button>
+                    <button class="btn accent-btn" onclick="alert('Coffee shop sounds coming in future update!')">☕ Cafe</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Burnout Support Section -->
+        <section class="card burnout-section" id="burnout-section">
+            <h2>❤️ Mental Wellness</h2>
+            <p class="support-text">It's okay to feel overwhelmed. We're here for you.</p>
+            
+            <button id="burnout-btn" class="btn warning-btn">I feel burned out</button>
+            
+            <!-- Hidden by default, shown when burnout button is clicked -->
+            <div id="burnout-options" class="hidden glass-panel">
+                <p class="question-text">What are you feeling right now?</p>
+                <div class="options-grid">
+                    <button class="btn option-btn" data-reason="anxiety">Anxiety</button>
+                    <button class="btn option-btn" data-reason="focus">Can't focus</button>
+                    <button class="btn option-btn" data-reason="energy">Low energy</button>
+                </div>
+            </div>
+            
+            <!-- Message container shown after selecting a reason -->
+            <div id="burnout-message" class="hidden message-box"></div>
+        </section>
+
+        <!-- FUTURE EXPANSION: Progress Tracking System Section -->
+        <!-- 
+        <section class="card progress-section">
+            <h2>Target Progress</h2>
+             Chart or detailed stats go here 
+        </section>
+        -->
+
+        <!-- FUTURE EXPANSION: Exam Planner Section -->
+        <!-- 
+        <section class="card planner-section">
+            <h2>Upcoming Exams</h2>
+             Syllabus tracker, deadlines, etc. 
+        </section>
+        -->
+
+    </main>
+
+    <!-- Generic Popup Modal (used for timer completion) -->
+    <div id="popup-modal" class="modal hidden" aria-modal="true" role="dialog">
+        <div class="modal-content glass-effect">
+            <h2 id="popup-title">Great job!</h2>
+            <p id="popup-text">You completed a study session!</p>
+            <div class="popup-actions">
+                <button id="close-popup-btn" class="btn primary-btn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
