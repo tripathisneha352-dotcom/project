@@ -1,0 +1,12 @@
+{
+  "name": "smart-study-assistant",
+  "version": "1.0.0",
+  "description": "Smart study assistant with Gemini summary/quiz, ambient sounds, and burnout check.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
