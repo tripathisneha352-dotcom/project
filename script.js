@@ -1,129 +1,93 @@
 /**
- * Smart Study Assistant - Core Logic
- * This file contains the interactive logic for the Pomodoro timer,
- * study buddy animations, and burnout support system.
- * 
- * Keep this file modular so future expansions (like music or planner)
- * can be added seamlessly.
+ * Smart Study Assistant - Frontend Logic
+ * Features:
+ * 1) Pomodoro timer
+ * 2) Focus & relax sounds
+ * 3) Gemini powered summary + quiz generation
+ * 4) Student burnout check scoring
  */
 
-// --- 1. DOM Element Variables ---
-
-// Timer
+// -----------------------------
+// 1) Timer Elements + State
+// -----------------------------
 const timeDisplay = document.getElementById('time-display');
 const studyInput = document.getElementById('study-input');
 const breakInput = document.getElementById('break-input');
 const startBtn = document.getElementById('start-btn');
 const breakBtn = document.getElementById('break-btn');
-function updateButtonLabels() {
-    let studyTime = studyInput.value || 25;
-    let breakTime = breakInput.value || 5;
-
-    startBtn.textContent = `Start Focus (${studyTime}m)`;
-    breakBtn.textContent = `Short Break (${breakTime}m)`;
-}
-updateButtonLabels();
 const pauseBtn = document.getElementById('pause-btn');
-studyInput.addEventListener("input", updateButtonLabels);
-breakInput.addEventListener("input", updateButtonLabels);
 const resetBtn = document.getElementById('reset-btn');
 const sessionCountEl = document.getElementById('session-count');
 const rewardMessageEl = document.getElementById('reward-message');
-const alarmSound = new Audio("https://www.soundjay.com/buttons/beep-07.wav");
 
-// Modal Popup
 const popupModal = document.getElementById('popup-modal');
 const popupTitle = document.getElementById('popup-title');
 const popupText = document.getElementById('popup-text');
 const closePopupBtn = document.getElementById('close-popup-btn');
 
-// Burnout Section
-const burnoutBtn = document.getElementById('burnout-btn');
-const burnoutOptions = document.getElementById('burnout-options');
-const burnoutMessage = document.getElementById('burnout-message');
-const optionBtns = document.querySelectorAll('.option-btn');
-
-// --- 2. State & Configuration ---
+const alarmSound = new Audio('https://www.soundjay.com/buttons/beep-07.wav');
 
 let timerInterval = null;
-let timeRemaining = 0; // stored in seconds
+let timeRemaining = 25 * 60;
 let isPaused = false;
-let isStudySession = true; // Tracks if current timer is a study block or break
-let sessionsCompleted = 0; // Progress tracking
+let isStudySession = true;
+let sessionsCompleted = 0;
 
-// Constants for time
-const STUDY_TIME_MINUTES = 25;
-const BREAK_TIME_MINUTES = 5;
-
-// Reward pool for studying
 const rewardMessages = [
     "🔥 You're doing great! Keep it up!",
-    "🚀 Fantastic focus!",
-    "⭐ One step closer to your goals!",
-    "🎓 Amazing work, future engineer!",
-    "🌱 Consistency is key. Well done!"
+    '🚀 Fantastic focus!',
+    '⭐ One step closer to your goals!',
+    '🎓 Amazing work, future engineer!',
+    '🌱 Consistency is key. Well done!'
 ];
 
+function updateButtonLabels() {
+    const studyTime = studyInput.value || 25;
+    const breakTime = breakInput.value || 5;
+    startBtn.textContent = `Start Focus (${studyTime}m)`;
+    breakBtn.textContent = `Short Break (${breakTime}m)`;
+}
 
-// --- 3. Timer Logic ---
-
-/**
- * Format raw seconds into a MM:SS string.
- * @param {number} seconds 
- * @returns {string} Formatted time string
- */
 function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-/**
- * Update the visual UI of the timer.
- */
 function updateDisplay() {
-    timeDisplay.textContent = formatTime(timeRemaining);
+    timeDisplay.textContent = formatTime(Math.max(0, timeRemaining));
 }
 
-/**
- * Handles the timer tick logic. Separated out for clarity.
- */
 function timerTick() {
-    timeRemaining--;
+    timeRemaining -= 1;
     updateDisplay();
 
     if (timeRemaining <= 0) {
         clearInterval(timerInterval);
+        timerInterval = null;
         handleTimerComplete();
     }
 }
 
-/**
- * Starts the countdown timer.
- * @param {number} minutes The duration to calculate
- * @param {boolean} isStudy Whether this is study or break time
- */
-
 function startTimer(minutes, isStudy) {
-    clearInterval(timerInterval);
-    if (isPaused) {
-    timerInterval = setInterval(timerTick, 1000);
-    isPaused = false;
-    return;
-}
+    if (!Number(minutes) || Number(minutes) <= 0) {
+        return;
+    }
 
-    // 2. Setup state
-    timeRemaining = minutes * 60;
+    clearInterval(timerInterval);
+    timerInterval = null;
+
     isStudySession = isStudy;
-    document.body.style.background = isStudy ? "#f4f7fb" : "#e0f7fa";
+    isPaused = false;
+    pauseBtn.textContent = 'Pause';
+
+    timeRemaining = Number(minutes) * 60;
     updateDisplay();
-    
-    // 3. UI Updates: Disable action buttons during active timer
+
     startBtn.disabled = true;
     breakBtn.disabled = true;
-    rewardMessageEl.textContent = "";
+    rewardMessageEl.textContent = '';
 
-    // 4. Start tick loop
     timerInterval = setInterval(timerTick, 1000);
 }
 
@@ -132,137 +96,254 @@ function pauseTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         isPaused = true;
-        pauseBtn.textContent = "Resume";
+        pauseBtn.textContent = 'Resume';
     } else if (isPaused) {
         timerInterval = setInterval(timerTick, 1000);
         isPaused = false;
-        pauseBtn.textContent = "Pause";
+        pauseBtn.textContent = 'Pause';
     }
 }
 
-/**
- * Triggered when the timer count hits exactly 0.
- */
 function handleTimerComplete() {
-    // 1. Re-enable interactive buttons
     startBtn.disabled = false;
     breakBtn.disabled = false;
-    
-    // 2. Handle completion based on session type
+
     if (isStudySession) {
-        // Study complete: increment counter, show reward
-        sessionsCompleted++;
+        sessionsCompleted += 1;
         sessionCountEl.textContent = `Sessions completed: ${sessionsCompleted}`;
-        
-        // Pick random encouraging message
-        const randomMsg = rewardMessages[Math.floor(Math.random() * rewardMessages.length)];
-        rewardMessageEl.textContent = randomMsg;
-        
-        // Show completion popup
-        showPopup("👏 Great job!", "You completed a focused study session!");
+        rewardMessageEl.textContent = rewardMessages[Math.floor(Math.random() * rewardMessages.length)];
+        showPopup('👏 Great job!', 'You completed a focused study session!');
     } else {
-        // Break complete
-        showPopup("⏰ Break's over!", "Time to get back to focused studying.");
+        showPopup("⏰ Break's over!", 'Time to get back to focused studying.');
     }
+
     alarmSound.play();
-    // ✅ STEP 4 HERE (auto switch)
-if (isStudySession) {
-    setTimeout(() => {
-        let breakTime = breakInput.value || 5;
-        startTimer(breakTime, false);
-    }, 2000);
 }
 
-
-}
-
-/**
- * Stops any active timer and resets to the default 25min layout.
- */
 function resetTimer() {
     clearInterval(timerInterval);
-    timeRemaining = STUDY_TIME_MINUTES * 60;
+    timerInterval = null;
+    isPaused = false;
     isStudySession = true;
-    
+    pauseBtn.textContent = 'Pause';
+    timeRemaining = (Number(studyInput.value) || 25) * 60;
     updateDisplay();
-    
     startBtn.disabled = false;
     breakBtn.disabled = false;
-    rewardMessageEl.textContent = "";
+    rewardMessageEl.textContent = '';
 }
 
-
-// --- 4. Popup Logic ---
-
-/**
- * Displays the modal overlay with a custom title and text
- */
 function showPopup(title, text) {
     popupTitle.textContent = title;
     popupText.textContent = text;
     popupModal.classList.remove('hidden');
 }
 
+// -----------------------------
+// 2) Ambient Sound Controls
+// -----------------------------
+const soundButtons = document.querySelectorAll('.sound-btn');
+const stopSoundBtn = document.getElementById('stop-sound-btn');
+const soundVolume = document.getElementById('sound-volume');
+const volumeValue = document.getElementById('volume-value');
+const soundStatus = document.getElementById('sound-status');
 
-// --- 5. Event Listeners ---
+// Placeholder file paths requested by user
+const soundMap = {
+    rain: 'audio/rain.mp3',
+    forest: 'audio/forest.mp3',
+    ocean: 'audio/ocean.mp3',
+    night: 'audio/night.mp3',
+    'white-noise': 'audio/white-noise.mp3',
+    cafe: 'audio/cafe.mp3'
+};
 
-// Timer Controls
-startBtn.addEventListener("click", function () {
-    let studyTime = document.getElementById("study-input").value || 25;
-    startTimer(studyTime, true);
-});
-breakBtn.addEventListener("click", function () {
-    let breakTime = document.getElementById("break-input").value || 5;
-    startTimer(breakTime, false);
-});
+let currentAudio = null;
+
+function playSound(soundKey) {
+    const filePath = soundMap[soundKey];
+
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+    }
+
+    currentAudio = new Audio(filePath);
+    currentAudio.loop = true;
+    currentAudio.volume = Number(soundVolume.value);
+
+    currentAudio.play()
+        .then(() => {
+            soundStatus.textContent = `Playing: ${soundKey.replace('-', ' ')}`;
+        })
+        .catch(() => {
+            soundStatus.textContent = `Could not play ${soundKey}. Add file at ${filePath}`;
+        });
+}
+
+function stopSound() {
+    if (!currentAudio) return;
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    soundStatus.textContent = 'No sound playing.';
+}
+
+// -----------------------------
+// 3) Gemini Summary + Quiz
+// -----------------------------
+const studyText = document.getElementById('study-text');
+const generateSummaryBtn = document.getElementById('generate-summary-btn');
+const generateQuizBtn = document.getElementById('generate-quiz-btn');
+const aiStatus = document.getElementById('ai-status');
+const summaryResult = document.getElementById('summary-result');
+const summaryText = document.getElementById('summary-text');
+const quizResult = document.getElementById('quiz-result');
+const quizList = document.getElementById('quiz-list');
+
+async function generateContent(type) {
+    const text = studyText.value.trim();
+    if (!text) {
+        aiStatus.textContent = 'Please paste text first.';
+        return;
+    }
+
+    aiStatus.textContent = `Generating ${type}...`;
+    generateSummaryBtn.disabled = true;
+    generateQuizBtn.disabled = true;
+
+    try {
+        const response = await fetch('/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, type })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to generate content');
+        }
+
+        if (type === 'summary') {
+            summaryText.textContent = data.summary || 'No summary generated.';
+            summaryResult.classList.remove('hidden');
+        }
+
+        if (type === 'quiz') {
+            renderQuiz(data.quiz || []);
+            quizResult.classList.remove('hidden');
+        }
+
+        aiStatus.textContent = 'Done ✅';
+    } catch (error) {
+        aiStatus.textContent = `Error: ${error.message}`;
+    } finally {
+        generateSummaryBtn.disabled = false;
+        generateQuizBtn.disabled = false;
+    }
+}
+
+function renderQuiz(quizItems) {
+    quizList.innerHTML = '';
+
+    quizItems.forEach((item, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'quiz-item';
+
+        const q = document.createElement('p');
+        q.className = 'quiz-question';
+        q.textContent = `${index + 1}. ${item.question}`;
+
+        const ul = document.createElement('ul');
+        ul.className = 'quiz-options';
+
+        (item.options || []).forEach((option) => {
+            const li = document.createElement('li');
+            li.textContent = option;
+            ul.appendChild(li);
+        });
+
+        const answer = document.createElement('p');
+        answer.className = 'quiz-answer';
+        answer.textContent = `Correct answer: ${item.answer}`;
+
+        wrapper.appendChild(q);
+        wrapper.appendChild(ul);
+        wrapper.appendChild(answer);
+        quizList.appendChild(wrapper);
+    });
+}
+
+// -----------------------------
+// 4) Burnout Check
+// -----------------------------
+const burnoutForm = document.getElementById('burnout-form');
+const burnoutResult = document.getElementById('burnout-result');
+const burnoutScoreText = document.getElementById('burnout-score');
+const burnoutFeedbackText = document.getElementById('burnout-feedback');
+
+function calculateBurnoutFeedback(totalScore) {
+    if (totalScore <= 14) {
+        return "You're doing fine";
+    }
+    if (totalScore <= 24) {
+        return 'Take breaks and manage time';
+    }
+    return 'You may be experiencing burnout';
+}
+
+// -----------------------------
+// 5) Event Listeners
+// -----------------------------
+studyInput.addEventListener('input', updateButtonLabels);
+breakInput.addEventListener('input', updateButtonLabels);
+startBtn.addEventListener('click', () => startTimer(studyInput.value || 25, true));
+breakBtn.addEventListener('click', () => startTimer(breakInput.value || 5, false));
+pauseBtn.addEventListener('click', pauseTimer);
 resetBtn.addEventListener('click', resetTimer);
 
-// Modal Controls
 closePopupBtn.addEventListener('click', () => {
     popupModal.classList.add('hidden');
 });
 
-// Burnout Section Events
-burnoutBtn.addEventListener('click', () => {
-    // Toggle the options grid visibility
-    if (burnoutOptions.classList.contains('hidden')) {
-        burnoutOptions.classList.remove('hidden');
-        burnoutMessage.classList.add('hidden'); // clear old msg
-    } else {
-        burnoutOptions.classList.add('hidden');
+soundButtons.forEach((button) => {
+    button.addEventListener('click', () => playSound(button.dataset.sound));
+});
+
+stopSoundBtn.addEventListener('click', stopSound);
+
+soundVolume.addEventListener('input', () => {
+    const value = Number(soundVolume.value);
+    volumeValue.textContent = `${Math.round(value * 100)}%`;
+    if (currentAudio) {
+        currentAudio.volume = value;
     }
 });
 
-optionBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        // Retrieve which concern was clicked
-        const reason = e.target.getAttribute('data-reason');
-        let supportText = "";
+generateSummaryBtn.addEventListener('click', () => generateContent('summary'));
+generateQuizBtn.addEventListener('click', () => generateContent('quiz'));
 
-        // Determine message mapping
-        switch(reason) {
-            case "anxiety":
-                supportText = "Take a deep breath. Count to 4 as you breathe in, hold for 4, and exhale for 4. You've got this. Take it one step at a time.";
-                break;
-            case "focus":
-                supportText = "It's normal to lose focus. Step away from the screen, drink some water, or stretch for 2 minutes before returning.";
-                break;
-            case "energy":
-                supportText = "Your body might need rest. Consider a 15-minute power nap or a healthy snack to recharge your batteries.";
-                break;
-            default:
-                supportText = "We're here for you. Take a breather.";
-        }
+burnoutForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-        // Hide options, show message
-        burnoutOptions.classList.add('hidden');
-        burnoutMessage.textContent = supportText;
-        burnoutMessage.classList.remove('hidden');
-    });
+    const answers = ['q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7']
+        .map((id) => Number(document.getElementById(id).value));
+
+    if (answers.some((value) => !value)) {
+        burnoutScoreText.textContent = 'Please answer all questions.';
+        burnoutFeedbackText.textContent = '';
+        burnoutResult.classList.remove('hidden');
+        return;
+    }
+
+    const totalScore = answers.reduce((sum, value) => sum + value, 0);
+    const feedback = calculateBurnoutFeedback(totalScore);
+
+    burnoutScoreText.textContent = `Total score: ${totalScore} / 35`;
+    burnoutFeedbackText.textContent = feedback;
+    burnoutResult.classList.remove('hidden');
 });
 
-// --- 6. Initialization ---
-
-// Setup initial UI loaded state
-resetTimer();
-pauseBtn.addEventListener('click', pauseTimer);
+// Initial UI state
+updateButtonLabels();
+updateDisplay();
