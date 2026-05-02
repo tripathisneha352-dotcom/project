@@ -55,7 +55,30 @@
         <div class="buddy-avatar" aria-hidden="true">👩‍💻</div>
         <p class="buddy-status">Studying quietly with you...</p>
       </div>
+      <button id="open-study-mate-btn" class="btn primary-btn">Open Study Mate</button>
     </section>
+    <div id="study-mate-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="study-mate-title">
+      <div class="modal-content study-mate-content">
+        <div class="study-mate-header">
+          <h3 id="study-mate-title">Study Mate</h3>
+          <button id="close-study-mate-btn" class="btn danger-btn" type="button">Close</button>
+        </div>
+        <div class="study-mate-options" role="tablist" aria-label="Study mate options">
+          <button class="btn study-mate-option" data-option-index="0" type="button">Night theme🌠🍃</button>
+          <button class="btn study-mate-option" data-option-index="1" type="button">Rain theme🌧️🌈</button>
+          <button class="btn study-mate-option" data-option-index="2" type="button">Cafe theme☕</button>
+          <button class="btn study-mate-option" data-option-index="3" type="button">Library theme📚</button>
+        </div>
+        <div class="study-mate-player-wrap hidden" id="study-mate-player-wrap">
+          <video id="study-mate-video" playsinline loop></video>
+          <div class="study-mate-controls">
+            <button id="study-mate-play-pause-btn" class="btn secondary-btn" type="button">Pause</button>
+            <button id="study-mate-mute-btn" class="btn warning-btn" type="button">Mute</button>
+            <button id="study-mate-fullscreen-btn" class="btn primary-btn" type="button">Fullscreen</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <section class="card burnout-section">
       <h2>❤️ Mental Wellness</h2>
       <p class="support-text">It's okay to feel overwhelmed. Take a minute and reset.</p>
@@ -121,16 +144,17 @@
 <html>
 <head>
 
-<title>Ambient Sounds</title>
+<title>Ambient Sound </title>
+</head>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-color:white;
+color:#ef92a8;
 text-align:center;
-background:linear-gradient(270deg,#020617,#0f172a,#1e293b);
+background:linear-gradient(#d79696,#fff9f4);
 background-size:600% 600%;
 animation:bgMove 15s ease infinite;
 overflow-x:hidden;
@@ -201,6 +225,7 @@ transition:0.3s;
 background:#16a34a;
 }
 
+
 /* falling leaves */
 
 .leaf{
@@ -220,17 +245,37 @@ transform:translateY(100vh) rotate(360deg);
 opacity:0;
 }
 }
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  align-items: stretch; /* important */
+}
 
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.sounds-section {
+  max-height: 500px;
+  overflow-y: auto;
+}
+.sound-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 </style>
 
-<h1>🌿 Ambient Sound Mixer</h1>
+<h1>🌿 Ambient Sounds</h1>
 
 <div class="sound-container">
 
 <!-- Rain -->
 <div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21">
-<p>Rain</p>
+<img src="https://images.unsplash.com/photo-1480044965905-02098d419e96?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmlyZHxlbnwwfHwwfHx8MA%3D%3D">
+<p>Birds</p>
 <audio loop>
 <source src="birds.mp3" type="audio/mpeg">
 </audio>
@@ -243,7 +288,7 @@ opacity:0;
 <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470">
 <p>Forest</p>
 <audio loop>
-<source src="clouds.mp3">
+<source src="mixkit-jungle-rain-and-birds-2392.wav" type="audio/mpeg">
 </audio>
 <button class="playBtn">Play</button>
 <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
@@ -254,7 +299,7 @@ opacity:0;
 <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
 <p>Ocean</p>
 <audio loop>
-<source src="evening.mp3">
+<source src="rainforest.mp3" type="audio/mpeg">
 </audio>
 <button class="playBtn">Play</button>
 <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
@@ -265,18 +310,18 @@ opacity:0;
 <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
 <p>Wind</p>
 <audio loop>
-<source src="fly away.mp3">
+<source src="mixkit-wind-in-the-top-of-the-mountain-1267.wav" type="audio/mpeg">
 </audio>
 <button class="playBtn">Play</button>
 <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
 </div>
 
-<!-- Thunder -->
+<!-- rain-->
 <div class="sound-card">
-<img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94">
-<p>Thunder</p>
+<img src="rain.jpg" alt="rain">
+<p>Rain</p>
 <audio loop>
-<source src="ghostrifter.mp3">
+<source src="dragon-studio-gentle-rain-07-437321.mp3" type="audio/mpeg">
 </audio>
 <button class="playBtn">Play</button>
 <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
@@ -287,7 +332,7 @@ opacity:0;
 <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
 <p>Nature</p>
 <audio loop>
-<source src="golden.mp3">
+<source src="mixkit-campfire-night-wind-1736.mp3" type="audio/mpeg">
 </audio>
 <button class="playBtn">Play</button>
 <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
