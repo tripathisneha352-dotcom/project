@@ -1,570 +1,767 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smart Study Assistant</title>
-  <meta
-    name="description"
-    content="A simple Pomodoro-style study assistant with a study buddy and burnout support."
-  />
+  <title>StudySync – Smart Study Assistant</title>
+  <meta name="description" content="AI-powered study assistant with planner, focus timer, analytics, and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="calendar.css" />
+  <link rel="stylesheet" href="flashcards.css" />
 </head>
-<body>
+<body class="app-body page-enter">
 
-<nav class="navbar">
-    <h1>🧑‍🎓 Smart Study Assistant</h1>
-    <p class="subtitle">Focus better. Recover better.</p>
-</nav>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">S</div>
+      <span class="brand-text">StudySync</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-label">Dashboard</span>
+        <a href="#dashboard-home" class="nav-item active" data-section="dashboard-home">
+          <span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span>
+        </a>
+      </div>
 
-<main class="dashboard">
-    <section class="card timer-section">
-      <h2>⏱️ Study Timer</h2>
+      <div class="nav-group">
+        <span class="nav-group-label">Study</span>
+        <a href="#study-progress" class="nav-item" data-section="study-progress">
+          <span class="nav-icon">📚</span><span class="nav-label">Subjects</span>
+        </a>
+        <a href="#recent-notes" class="nav-item" data-section="recent-notes">
+          <span class="nav-icon">📝</span><span class="nav-label">Notes</span>
+        </a>
+        <a href="#pdf-section" class="nav-item" data-section="pdf-section">
+          <span class="nav-icon">📄</span><span class="nav-label">PDFs</span>
+        </a>
+        <a href="#flashcards" class="nav-item" data-section="flashcards">
+          <span class="nav-icon">🧠</span><span class="nav-label">Flashcards</span>
+        </a>
+        <a href="#ai-assistant" class="nav-item" data-section="ai-assistant">
+          <span class="nav-icon">❓</span><span class="nav-label">Quiz Generator</span>
+        </a>
+      </div>
 
-      <div class="timer-inputs">
-        <label>
-          Study (min)
-          <input type="number" id="study-input" min="1" value="25" />
-        </label>
-        <label>
-          Break (min)
-          <input type="number" id="break-input" min="1" value="5" />
-        </label>
+      <div class="nav-group">
+        <span class="nav-group-label">AI</span>
+        <a href="#ai-assistant" class="nav-item" data-section="ai-assistant">
+          <span class="nav-icon">🤖</span><span class="nav-label">AI Assistant</span>
+        </a>
       </div>
-      <div class="timer-display" id="time-display">25:00</div>
-      <div class="timer-controls">
-        <button id="start-btn" class="btn primary-btn">Start Focus (25m)</button>
-        <button id="break-btn" class="btn secondary-btn">Short Break (5m)</button>
-        <button id="pause-btn" class="btn warning-btn">Pause</button>
-        <button id="reset-btn" class="btn danger-btn">Reset</button>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Community</span>
+        <a href="#studybuddy" class="nav-item" data-section="studybuddy">
+          <span class="nav-icon">👥</span><span class="nav-label">StudyBuddy</span>
+        </a>
       </div>
-      <div class="progress-info">
-        <p id="session-count">Sessions completed: 0</p>
-        <p id="reward-message" class="reward-msg"></p>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Productivity</span>
+        <a href="#planner-section" class="nav-item" data-section="planner-section">
+          <span class="nav-icon">📅</span><span class="nav-label">Calendar Planner</span>
+        </a>
+        <a href="#goals" class="nav-item" data-section="goals">
+          <span class="nav-icon">🎯</span><span class="nav-label">Goals</span>
+        </a>
+        <a href="#analytics" class="nav-item" data-section="analytics">
+          <span class="nav-icon">📈</span><span class="nav-label">Progress</span>
+        </a>
       </div>
-    </section>
-     <section class="card buddy-section">
-      <h2>👥 Study Buddy</h2>
-      <div class="buddy-container">
-        <div class="buddy-avatar" aria-hidden="true">👩‍💻</div>
-        <p class="buddy-status">Studying quietly with you...</p>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Wellness</span>
+        <a href="#mental-burnout" class="nav-item" data-section="mental-burnout">
+          <span class="nav-icon">🧘</span><span class="nav-label">Mental Burnout</span>
+        </a>
+        <a href="#focus-timer" class="nav-item" data-section="focus-timer">
+          <span class="nav-icon">⏱️</span><span class="nav-label">Focus Timer</span>
+        </a>
       </div>
-      <button id="open-study-mate-btn" class="btn primary-btn">Open Study Mate</button>
-    </section>
-    <div id="study-mate-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="study-mate-title">
-      <div class="modal-content study-mate-content">
-        <div class="study-mate-header">
-          <h3 id="study-mate-title">Study Mate</h3>
-          <button id="close-study-mate-btn" class="btn danger-btn" type="button">Close</button>
+
+      <div class="nav-group">
+        <span class="nav-group-label">Account</span>
+        <a href="#settings" class="nav-item" data-section="settings">
+          <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+        </a>
+        <a href="#profile" class="nav-item" data-section="profile">
+          <span class="nav-icon">👤</span><span class="nav-label">Profile</span>
+        </a>
+      </div>
+    </nav>
+    <button class="sidebar-collapse-btn" id="sidebar-toggle" aria-label="Toggle sidebar">‹</button>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">☰</button>
+      <div class="topbar-logo">
+        <span class="logo-mark">S</span>
+        <span class="logo-name">StudySync</span>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="global-search" placeholder="Search notes, tasks, subjects..." />
+      </div>
+      <div class="topbar-actions">
+        <span class="topbar-date" id="topbar-date"></span>
+        <button class="icon-btn" id="notif-btn" aria-label="Notifications">
+          🔔<span class="notif-dot"></span>
+        </button>
+        <button class="icon-btn" id="theme-toggle" aria-label="Toggle night theme">🌙</button>
+        <button class="avatar-btn" id="profile-btn" aria-label="Profile">
+          <span class="avatar" id="topbar-avatar">?</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <!-- Dashboard -->
+      <section id="dashboard-home" class="content-section">
+        <div class="welcome-block fade-up">
+          <h1 class="welcome-title" id="welcome-title">Good Evening, Welcome Back!</h1>
+          <p class="welcome-sub">Here's your study overview for today.</p>
         </div>
-        <div class="study-mate-options" role="tablist" aria-label="Study mate options">
-          <button class="btn study-mate-option" data-option-index="0" type="button">Night theme🌠🍃</button>
-          <button class="btn study-mate-option" data-option-index="1" type="button">Rain theme🌧️🌈</button>
-          <button class="btn study-mate-option" data-option-index="2" type="button">Cafe theme☕</button>
-          <button class="btn study-mate-option" data-option-index="3" type="button">Library theme📚</button>
-        </div>
-        <div class="study-mate-player-wrap hidden" id="study-mate-player-wrap">
-          <video id="study-mate-video" playsinline loop></video>
-          <div class="study-mate-controls">
-            <button id="study-mate-play-pause-btn" class="btn secondary-btn" type="button">Pause</button>
-            <button id="study-mate-mute-btn" class="btn warning-btn" type="button">Mute</button>
-            <button id="study-mate-fullscreen-btn" class="btn primary-btn" type="button">Fullscreen</button>
+
+        <div class="stats-grid fade-up delay-1">
+          <div class="stat-card glass-card">
+            <div class="stat-icon">⏱️</div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-hours" data-count="0">0</span>
+              <span class="stat-label">Hours Studied</span>
+              <span class="stat-trend" id="trend-hours">Start a focus session</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-streak" data-count="0">0</span>
+              <span class="stat-label">Current Streak</span>
+              <span class="stat-trend" id="trend-streak">No streak yet</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-tasks-due" data-count="0">0</span>
+              <span class="stat-label">Tasks Due</span>
+              <span class="stat-trend" id="trend-tasks">Add tasks in planner</span>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-body">
+              <span class="stat-value" id="stat-productivity" data-count="0">0</span>
+              <span class="stat-suffix">%</span>
+              <span class="stat-label">Productivity Score</span>
+              <span class="stat-trend" id="trend-productivity">Complete tasks to score</span>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <section class="card burnout-section">
-      <h2>❤️ Mental Wellness</h2>
-      <p class="support-text">It's okay to feel overwhelmed. Take a minute and reset.</p>
-        <button id="burnout-btn" class="btn warning-btn">I feel burned out</button>
-        <div id="burnout-options" class="hidden burnout-options">
-        <p>What are you feeling right now?</p>
-        <div class="options-grid">
-          <button class="btn option-btn" data-reason="anxiety">Anxiety</button>
-          <button class="btn option-btn" data-reason="focus">Can't focus</button>
-          <button class="btn option-btn" data-reason="energy">Low energy</button>
+
+        <div class="dashboard-grid fade-up delay-1" id="dashboard-widgets">
+          <div class="dashboard-widget glass-card">
+            <h3>Recent Notes</h3>
+            <div id="dash-notes-widget"></div>
+          </div>
+          <div class="dashboard-widget glass-card">
+            <h3>Today's Tasks</h3>
+            <div id="dash-tasks-widget"></div>
+          </div>
+          <div class="dashboard-widget glass-card">
+            <h3>Study Sessions</h3>
+            <div id="dash-sessions-widget"></div>
+          </div>
+          <div class="dashboard-widget glass-card">
+            <h3>Your Subjects</h3>
+            <div id="dash-subjects-widget"></div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div id="burnout-message" class="hidden message-box" aria-live="polite"></div>
+      <!-- Subjects -->
+      <section id="study-progress" class="content-section">
+        <div class="section-head">
+          <div>
+            <h2>Study Progress</h2>
+            <p>Track your subject-wise mastery</p>
+          </div>
+          <button class="glass-btn sm primary" id="add-subject-btn">+ Add Subject</button>
+        </div>
+        <div id="subjects-empty" class="empty-state glass-card">
+          <span class="empty-icon">📚</span>
+          <p>No subjects yet. Click "Add Subject" to start tracking your progress.</p>
+        </div>
+        <div class="progress-cards-grid" id="subjects-container"></div>
+      </section>
 
-      <div id="popup-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+      <!-- Notes -->
+      <section id="recent-notes" class="content-section">
+        <div class="section-head">
+          <div>
+            <h2>Notes</h2>
+            <p>Capture ideas, organize thoughts, and review later</p>
+          </div>
+          <div class="notes-head-actions">
+            <button class="glass-btn sm primary" id="save-note-btn">💾 Save to Library</button>
+            <button class="glass-btn sm" id="downloadNotesBtn">⬇️ Download</button>
+          </div>
+        </div>
+        <div class="notes-toolbar">
+          <div class="notes-search">
+            <span>🔍</span>
+            <input type="search" id="notes-search-input" placeholder="Search notes..." />
+          </div>
+          <select class="notes-filter-select" id="notes-filter-subject" aria-label="Filter by subject">
+            <option value="">All subjects</option>
+          </select>
+          <select class="notes-filter-select" id="notes-sort" aria-label="Sort notes">
+            <option value="updated">Recently updated</option>
+            <option value="created">Date created</option>
+            <option value="title">Title A–Z</option>
+          </select>
+        </div>
+        <div class="notes-editor glass-card">
+          <textarea id="notes-area" placeholder="Write your notes here..."></textarea>
+          <div class="notes-actions">
+            <button id="clearNotesBtn" class="glass-btn danger sm">Clear</button>
+          </div>
+        </div>
+        <div id="notes-empty" class="empty-state glass-card">
+          <span class="empty-icon">📝</span>
+          <p>No notes yet. Write above and click "Save to Library".</p>
+        </div>
+        <div class="notes-cards-grid" id="notes-cards-grid"></div>
+      </section>
+
+      <!-- PDF Section -->
+      <section id="pdf-section" class="content-section">
+        <div class="section-head">
+          <div>
+            <h2>PDF Library</h2>
+            <p>Upload study materials for AI-powered summaries and quizzes</p>
+          </div>
+        </div>
+        <div class="glass-card" style="padding:1.25rem">
+          <div class="pdf-upload-zone" id="pdf-drop-zone">
+            <span class="upload-icon">📄</span>
+            <p><strong>Drag & drop your PDF here</strong></p>
+            <p class="upload-hint">or click to browse · Supports PDF and .txt files</p>
+            <input type="file" id="pdf-file-input" accept=".pdf,.txt" hidden />
+          </div>
+          <div class="upload-progress" id="upload-progress">
+            <div class="upload-progress-bar" id="upload-progress-bar"></div>
+          </div>
+          <div id="pdf-file-status" class="file-status hidden"></div>
+          <div id="pdf-cards-container" class="pdf-cards-grid"></div>
+          <div id="pdf-empty" class="widget-empty">
+            <span class="empty-icon">📄</span>
+            Upload your first PDF to get started with AI summaries and quizzes.
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Assistant -->
+      <section id="ai-assistant" class="content-section">
+        <div class="ai-assistant-card glass-card">
+          <div class="ai-assistant-header">
+            <div class="ai-avatar">🤖</div>
+            <div>
+              <h2>AI Study Assistant</h2>
+              <p id="ai-greeting">How can I help you study today?</p>
+            </div>
+          </div>
+          <div class="ai-chat-area" id="ai-chat-area"></div>
+          <div class="ai-suggested-prompts">
+            <button class="prompt-chip" data-prompt="Summarize my notes">Summarize my notes</button>
+            <button class="prompt-chip" data-prompt="Explain this topic">Explain this topic</button>
+            <button class="prompt-chip" data-prompt="Generate MCQs">Generate MCQs</button>
+            <button class="prompt-chip" data-prompt="Create Flashcards" data-action="flashcards">Create Flashcards</button>
+            <button class="prompt-chip" data-prompt="Make a study plan">Make a study plan</button>
+          </div>
+          <div class="ai-input-row">
+            <label class="file-upload-btn" for="fileInput" title="Upload PDF or text">
+              📎
+              <input type="file" id="fileInput" accept=".pdf,.txt" onchange="handleFileUpload(event)" hidden />
+            </label>
+            <input type="text" id="ai-input" class="ai-text-input" placeholder="Ask StudySync anything..." />
+            <button class="icon-btn mic-btn" id="mic-btn" aria-label="Voice input">🎤</button>
+            <button class="send-btn" id="ai-send-btn" aria-label="Send">➤</button>
+          </div>
+          <div id="file-status" class="file-status hidden"></div>
+          <div id="file-label-text" class="hidden"></div>
+          <div class="ai-tool-actions">
+            <button class="glass-btn" onclick="generateSummary()">📌 Generate Summary</button>
+            <button class="glass-btn" onclick="generateQuiz()">🧠 Generate Quiz</button>
+          </div>
+          <div id="ai-loader" class="ai-loader hidden">
+            <div class="spinner"></div>
+            <span id="loader-text">Thinking...</span>
+          </div>
+          <div id="outputBox" class="ai-output"></div>
+        </div>
+      </section>
+
+      <!-- Calendar Planner -->
+      <section id="planner-section" class="planner-section page-enter">
+        <div class="section-head">
+          <div>
+            <h2>Calendar Planner</h2>
+            <p>Plan your schedule, track deadlines, and stay organized</p>
+          </div>
+        </div>
+        <div class="planner-layout">
+          <div class="planner-card calendar-section">
+            <div class="calendar-header">
+              <h3>Monthly Calendar</h3>
+              <div class="calendar-nav">
+                <button class="calendar-nav-btn" id="calendar-prev" aria-label="Previous month">‹</button>
+                <span class="calendar-month-label" id="calendar-month-label"></span>
+                <button class="calendar-nav-btn" id="calendar-next" aria-label="Next month">›</button>
+              </div>
+            </div>
+            <div class="calendar-weekdays">
+              <span class="calendar-weekday">Sun</span><span class="calendar-weekday">Mon</span>
+              <span class="calendar-weekday">Tue</span><span class="calendar-weekday">Wed</span>
+              <span class="calendar-weekday">Thu</span><span class="calendar-weekday">Fri</span>
+              <span class="calendar-weekday">Sat</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid"></div>
+            <div class="monthly-overview">
+              <h4>Monthly Overview</h4>
+              <div class="overview-stats">
+                <div class="overview-stat"><div class="value" id="overview-total">0</div><div class="label">Total Tasks</div></div>
+                <div class="overview-stat"><div class="value" id="overview-completed">0</div><div class="label">Completed</div></div>
+                <div class="overview-stat"><div class="value" id="overview-study">0m</div><div class="label">Study Time</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="planner-panel">
+            <div class="planner-card">
+              <div class="panel-date-header">
+                <div>
+                  <h3 id="panel-date"></h3>
+                  <p class="day-label" id="panel-day-label"></p>
+                </div>
+                <div class="view-tabs">
+                  <button class="view-tab active" data-view="daily">Daily</button>
+                  <button class="view-tab" data-view="weekly">Weekly</button>
+                </div>
+              </div>
+              <div id="daily-view">
+                <div class="daily-goal-section" style="margin-top:1rem">
+                  <label for="daily-goal">🎯 Daily Goal</label>
+                  <input type="text" class="daily-goal-input" id="daily-goal" placeholder="What's your main focus today?" />
+                </div>
+              </div>
+              <div id="weekly-view" style="display:none;margin-top:1rem">
+                <div class="section-header"><h4>Weekly Planning</h4></div>
+                <div class="weekly-grid" id="weekly-grid"></div>
+              </div>
+            </div>
+            <div class="planner-card">
+              <div class="section-header"><h4>Today's Tasks</h4><span class="section-count" id="task-count">0 remaining</span></div>
+              <ul class="task-list" id="task-list"></ul>
+            </div>
+            <div class="planner-card">
+              <div class="section-header"><h4>Study Sessions</h4></div>
+              <ul class="study-sessions-list" id="sessions-list"></ul>
+            </div>
+            <div class="planner-card">
+              <div class="section-header"><h4>Progress</h4></div>
+              <div class="progress-section">
+                <div class="progress-ring-container">
+                  <svg class="progress-ring" width="80" height="80" viewBox="0 0 80 80">
+                    <defs><linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4F46E5"/><stop offset="100%" stop-color="#8B5CF6"/>
+                    </linearGradient></defs>
+                    <circle class="progress-ring-bg" cx="40" cy="40" r="34"/>
+                    <circle class="progress-ring-fill" id="progress-ring-fill" cx="40" cy="40" r="34"/>
+                  </svg>
+                  <div class="progress-percent" id="progress-percent">0%</div>
+                </div>
+                <div class="progress-stats">
+                  <div class="progress-stat completed"><div class="stat-value" id="stat-completed">0</div><div class="stat-label">Done</div></div>
+                  <div class="progress-stat remaining"><div class="stat-value" id="stat-remaining">0</div><div class="stat-label">Left</div></div>
+                  <div class="progress-stat study-time"><div class="stat-value" id="stat-study-time">0m</div><div class="stat-label">Study</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="planner-card">
+              <div class="section-header"><h4>Deadlines & Exams</h4></div>
+              <ul class="deadlines-list" id="deadlines-list"></ul>
+            </div>
+            <div class="planner-card">
+              <div class="section-header"><h4>Day Notes</h4></div>
+              <textarea class="notes-textarea" id="day-notes" placeholder="Notes for today..."></textarea>
+            </div>
+            <div class="ai-suggestions-card">
+              <div class="ai-card-header"><div class="ai-icon">🤖</div><h4>AI Study Suggestions</h4></div>
+              <ul class="ai-suggestions-list" id="ai-suggestions"></ul>
+            </div>
+          </div>
+        </div>
+        <button class="fab ripple" id="fab-add-task" aria-label="Add task">+</button>
+        <div class="modal-overlay" id="task-modal" role="dialog" aria-modal="true">
+          <div class="modal-dialog">
+            <div class="modal-header">
+              <h3 id="modal-title">Add Task</h3>
+              <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+            </div>
+            <form id="task-form">
+              <div class="form-group"><label for="task-title-input">Task Title</label>
+                <input type="text" id="task-title-input" required placeholder="e.g. Review Chapter 5" /></div>
+              <div class="form-group"><label for="task-subject">Subject</label>
+                <input type="text" id="task-subject" placeholder="Mathematics" /></div>
+              <div class="form-row">
+                <div class="form-group"><label for="task-date">Date</label><input type="date" id="task-date" required /></div>
+                <div class="form-group"><label for="task-time">Time</label><input type="time" id="task-time" /></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label for="task-priority">Priority</label>
+                  <select id="task-priority"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select></div>
+                <div class="form-group"><label for="task-type">Type</label>
+                  <select id="task-type"><option value="task">Task</option><option value="assignment">Assignment</option><option value="exam">Exam</option><option value="revision">Revision</option></select></div>
+              </div>
+              <div class="form-group"><label for="task-notes">Notes</label><textarea id="task-notes" rows="2"></textarea></div>
+              <div class="modal-actions">
+                <button type="button" class="planner-btn planner-btn-secondary" id="modal-cancel">Cancel</button>
+                <button type="submit" class="planner-btn planner-btn-primary">Save Task</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Progress / Analytics -->
+      <section id="analytics" class="content-section">
+        <div class="section-head"><h2>Study Analytics</h2><p>Your performance at a glance — based on your real activity</p></div>
+        <div class="analytics-grid">
+          <div class="chart-card glass-card">
+            <h3>Weekly Study Hours</h3>
+            <div class="bar-chart" id="weekly-chart"></div>
+          </div>
+          <div class="chart-card glass-card">
+            <h3>Subject Distribution</h3>
+            <div class="donut-chart">
+              <svg viewBox="0 0 120 120" id="donut-svg">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E5E7EB" stroke-width="14"/>
+              </svg>
+              <div class="donut-legend" id="donut-legend">
+                <span class="empty-state-inline">Add subjects to see distribution</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card glass-card">
+            <h3>Task Completion</h3>
+            <div class="completion-ring-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#E5E7EB" stroke-width="8"/>
+                <circle id="task-completion-ring" cx="50" cy="50" r="42" fill="none" stroke="url(#taskGrad)" stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="264" stroke-dashoffset="264" class="ring-animate" transform="rotate(-90 50 50)"/>
+                <defs><linearGradient id="taskGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#22C55E"/><stop offset="100%" stop-color="#4F46E5"/>
+                </linearGradient></defs>
+              </svg>
+              <span class="ring-label" id="task-completion-label">0%</span>
+            </div>
+          </div>
+          <div class="chart-card glass-card">
+            <h3>Monthly Productivity</h3>
+            <div class="sparkline">
+              <svg viewBox="0 0 200 60" preserveAspectRatio="none" id="sparkline-svg">
+                <defs><linearGradient id="sparkGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#4F46E5"/><stop offset="100%" stop-color="#8B5CF6"/>
+                </linearGradient></defs>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- StudyBuddy -->
+      <section id="studybuddy" class="content-section studybuddy-section">
+        <div class="section-head section-head-justified">
+          <div>
+            <h2>StudyBuddy</h2>
+            <p class="section-desc-justify">Choose an ambient environment — video plays with sound in the player below.</p>
+          </div>
+          <button type="button" class="glass-btn sm primary" id="studybuddy-open-modal-btn">Open Player</button>
+        </div>
+        <div class="studybuddy-grid studybuddy-grid-justified">
+          <button type="button" class="studybuddy-card glass-card study-mate-option" data-option-index="0">
+            <span class="card-emoji">🌠</span>
+            <h3>Night Sky</h3>
+            <p>Calm starry atmosphere for late-night focus</p>
+          </button>
+          <button type="button" class="studybuddy-card glass-card study-mate-option" data-option-index="1">
+            <span class="card-emoji">🌧️</span>
+            <h3>Rain</h3>
+            <p>Soothing rainfall to block distractions</p>
+          </button>
+          <button type="button" class="studybuddy-card glass-card study-mate-option" data-option-index="2">
+            <span class="card-emoji">☕</span>
+            <h3>Café</h3>
+            <p>Warm café ambience for productive sessions</p>
+          </button>
+          <button type="button" class="studybuddy-card glass-card study-mate-option" data-option-index="3">
+            <span class="card-emoji">📚</span>
+            <h3>Library</h3>
+            <p>Classic library setting for deep work</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Mental Burnout -->
+      <section id="mental-burnout" class="content-section">
+        <div class="section-head">
+          <div>
+            <h2>Mental Burnout</h2>
+            <p>Check in with yourself and get supportive guidance</p>
+          </div>
+        </div>
+        <div class="wellness-indicators">
+          <div class="wellness-indicator glass-card">
+            <div class="indicator-value" id="wellness-sessions">0</div>
+            <div class="indicator-label">Focus sessions</div>
+          </div>
+          <div class="wellness-indicator glass-card">
+            <div class="indicator-value" id="wellness-streak">0</div>
+            <div class="indicator-label">Day streak</div>
+          </div>
+          <div class="wellness-indicator glass-card">
+            <div class="indicator-value" id="wellness-hours">0h</div>
+            <div class="indicator-label">Hours studied</div>
+          </div>
+        </div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem">How are you feeling right now?</p>
+        <div class="wellness-grid" id="wellness-options">
+          <div class="wellness-card glass-card option-btn" data-reason="anxiety">
+            <span class="wellness-icon">😰</span>
+            <h3>Anxiety</h3>
+            <p>Feeling overwhelmed or stressed</p>
+          </div>
+          <div class="wellness-card glass-card option-btn" data-reason="focus">
+            <span class="wellness-icon">🎯</span>
+            <h3>Can't Focus</h3>
+            <p>Mind keeps wandering</p>
+          </div>
+          <div class="wellness-card glass-card option-btn" data-reason="energy">
+            <span class="wellness-icon">🔋</span>
+            <h3>Low Energy</h3>
+            <p>Feeling tired or drained</p>
+          </div>
+        </div>
+        <div id="wellness-message" class="wellness-message-card hidden"></div>
+        <div id="burnout-options" class="burnout-options hidden">
+          <button class="option-btn glass-btn sm" data-reason="anxiety">Anxiety</button>
+          <button class="option-btn glass-btn sm" data-reason="focus">Can't Focus</button>
+          <button class="option-btn glass-btn sm" data-reason="energy">Low Energy</button>
+        </div>
+        <p id="burnout-message" class="burnout-message hidden"></p>
+      </section>
+
+      <!-- Focus Timer -->
+      <section id="focus-timer" class="content-section">
+        <div class="section-head"><h2>Focus Timer</h2><p>Pomodoro technique for deep work</p></div>
+        <div class="timer-card glass-card">
+          <div class="timer-ring-wrap">
+            <svg class="timer-ring" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" fill="none" stroke="#E5E7EB" stroke-width="8"/>
+              <circle id="timer-ring-progress" cx="100" cy="100" r="90" fill="none" stroke="url(#timerGrad)" stroke-width="8"
+                stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+              <defs><linearGradient id="timerGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#4F46E5"/><stop offset="100%" stop-color="#8B5CF6"/>
+              </linearGradient></defs>
+            </svg>
+            <div class="timer-center">
+              <div class="timer-display" id="time-display">25:00</div>
+              <p class="timer-session" id="timer-session-label">Focus Session</p>
+            </div>
+          </div>
+          <div class="timer-inputs">
+            <label>Study (min)<input type="number" id="study-input" min="1" value="25" /></label>
+            <label>Break (min)<input type="number" id="break-input" min="1" value="5" /></label>
+          </div>
+          <div class="timer-controls">
+            <button id="start-btn" class="glass-btn primary">Start Focus</button>
+            <button id="break-btn" class="glass-btn">Break</button>
+            <button id="pause-btn" class="glass-btn">Pause</button>
+            <button id="reset-btn" class="glass-btn danger">Reset</button>
+          </div>
+          <p id="session-count" class="session-count">Sessions completed: 0</p>
+          <p id="reward-message" class="reward-msg"></p>
+          <button id="open-study-mate-btn" class="glass-btn sm">👥 StudyBuddy</button>
+          <button id="burnout-btn" class="glass-btn sm">🧘 Wellness Check</button>
+        </div>
+      </section>
+
+      <!-- Goals -->
+      <section id="goals" class="content-section">
+        <div class="motivation-card glass-card fade-up">
+          <span class="quote-icon">💡</span>
+          <blockquote id="daily-quote">"The secret of getting ahead is getting started."</blockquote>
+          <cite id="quote-author">— Mark Twain</cite>
+        </div>
+        <div class="section-head" style="margin-top:2rem"><h2>Quick To-Do</h2></div>
+        <div class="todo-widget glass-card">
+          <div class="todo-input-row">
+            <input type="text" id="todo-input" placeholder="Add a quick task..." />
+            <button onclick="addTask()" class="glass-btn primary sm">Add</button>
+          </div>
+          <ul id="todo-list" class="todo-list"></ul>
+          <div id="todo-empty" class="empty-state-inline">No tasks yet. Add one above.</div>
+        </div>
+      </section>
+
+      <!-- Flashcards -->
+      <section id="flashcards" class="content-section flashcards-section">
+        <div class="section-head">
+          <div>
+            <h2>Flashcards</h2>
+            <p>Generate cute pastel study cards from your PDF with AI</p>
+          </div>
+        </div>
+
+        <div class="glass-card" style="padding:1.25rem">
+          <div class="flashcards-toolbar">
+            <button class="glass-btn sm" id="flashcard-upload-btn">📎 Upload PDF</button>
+            <input type="file" id="flashcard-file-input" accept=".pdf,.txt" hidden />
+            <button class="glass-btn primary sm" id="flashcard-generate-btn">✨ Generate Flashcards</button>
+            <button class="glass-btn sm" id="flashcard-shuffle-btn">🔀 Shuffle</button>
+            <button class="glass-btn sm danger" id="flashcard-clear-btn">Clear Deck</button>
+            <span class="flashcards-upload-hint">Upload a PDF, then generate. Uses the same file as PDFs & AI Assistant.</span>
+            <span class="flashcards-status hidden" id="flashcards-status"></span>
+          </div>
+
+          <div class="flashcards-loader hidden" id="flashcards-loader">
+            <div class="spinner"></div>
+            <span id="flashcards-loader-text">Generating flashcards from your PDF...</span>
+          </div>
+
+          <div class="flashcards-empty" id="flashcards-empty">
+            <span class="empty-icon">🌸</span>
+            <p>No flashcards yet.</p>
+            <p style="margin-top:0.5rem;font-size:0.85rem">Upload your first PDF and click <strong>Generate Flashcards</strong>.</p>
+          </div>
+
+          <div id="flashcards-deck-header" class="flashcards-deck-header hidden">
+            <div>
+              <div class="flashcards-deck-title" id="flashcards-deck-title">Study Deck</div>
+              <div class="flashcards-deck-meta" id="flashcards-deck-meta"></div>
+            </div>
+          </div>
+
+          <div class="flashcards-progress hidden" id="flashcards-progress-wrap">
+            <div class="flashcards-progress-fill" id="flashcards-progress-fill" style="width:0"></div>
+          </div>
+
+          <div class="flashcards-viewer hidden" id="flashcards-viewer">
+            <div class="flashcard-3d" id="flashcard-3d"></div>
+            <p class="flashcard-hint">Click card to flip · ← → to navigate · Space to flip</p>
+          </div>
+
+          <div class="flashcards-controls hidden" id="flashcards-controls">
+            <button class="glass-btn sm" id="flashcard-prev-btn">← Prev</button>
+            <span class="flashcards-counter" id="flashcards-counter">0 / 0</span>
+            <button class="glass-btn sm" id="flashcard-next-btn">Next →</button>
+          </div>
+
+          <div class="flashcards-notes hidden" id="flashcards-notes"></div>
+          <div class="flashcards-grid-preview hidden" id="flashcards-grid-preview"></div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section id="settings" class="content-section">
+        <div class="placeholder-card glass-card" style="max-width:560px">
+          <span class="placeholder-icon">⚙️</span>
+          <h2>Settings</h2>
+          <div class="settings-list">
+            <label class="setting-row"><span>Notifications</span><input type="checkbox" id="setting-notifications" checked /></label>
+            <label class="setting-row"><span>Auto-save notes</span><input type="checkbox" id="setting-autosave" checked /></label>
+            <label class="setting-row"><span>Night theme</span><input type="checkbox" id="setting-night-theme" /></label>
+            <label class="setting-row"><span>Focus sounds</span><a href="sound.html" class="glass-btn sm">Open Sound Mixer</a></label>
+            <div class="setting-row danger-row">
+              <span>Clear all data</span>
+              <button class="glass-btn sm danger" id="clear-all-data-btn">Reset</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile -->
+      <section id="profile" class="content-section">
+        <div class="profile-card glass-card">
+          <div class="profile-avatar-lg" id="profile-avatar-lg">?</div>
+          <input type="text" id="profile-name-input" class="profile-input" placeholder="Your name" />
+          <input type="email" id="profile-email-input" class="profile-input" placeholder="your@email.com" />
+          <div class="profile-stats">
+            <div><strong id="profile-hours">0h</strong><span>Studied</span></div>
+            <div><strong id="profile-streak">0</strong><span>Day Streak</span></div>
+            <div><strong id="profile-score">0%</strong><span>Score</span></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Quick Actions FAB -->
+  <div class="quick-fab-wrap">
+    <div class="quick-actions-menu hidden" id="quick-actions-menu">
+      <button class="quick-action-item" data-action="note">📝 Add Note</button>
+      <button class="quick-action-item" data-action="pdf">📄 Upload PDF</button>
+      <button class="quick-action-item" data-action="ai">🤖 Ask AI</button>
+      <button class="quick-action-item" data-action="flashcard">🧠 Flashcards</button>
+      <button class="quick-action-item" data-action="quiz">❓ New Quiz</button>
+      <button class="quick-action-item" data-action="task">📅 Planner Task</button>
+    </div>
+    <button class="quick-fab" id="quick-fab" aria-label="Quick actions">+</button>
+  </div>
+
+  <!-- Modals -->
+  <div id="popup-modal" class="modal hidden" role="dialog">
     <div class="modal-content">
-      <h3 id="popup-title">Great job!</h3>
-      <p id="popup-text">You completed a study session.</p>
-      <button id="close-popup-btn" class="btn primary-btn">Continue</button>
+      <h3 id="popup-title"></h3>
+      <p id="popup-text"></p>
+      <button id="close-popup-btn" class="glass-btn primary">OK</button>
     </div>
   </div>
-    </section>
 
-  
-  
-  <section class="card todo-section">
-    <h2>📝 To-Do List</h2>
-
-    <div class="todo-input">
-        <input type="text" id="todo-input" placeholder="Add a task..." />
-        <button onclick="addTask()" class="btn primary-btn">Add</button>
+  <div id="study-mate-modal" class="modal hidden" role="dialog">
+    <div class="modal-content study-mate-content">
+      <div class="study-mate-header">
+        <h3>StudyBuddy — Ambient Environments</h3>
+        <button type="button" id="close-study-mate-btn" class="glass-btn danger sm">Close</button>
+      </div>
+      <div class="study-mate-options study-mate-options-justified">
+        <button type="button" class="glass-btn study-mate-option" data-option-index="0">Night 🌠</button>
+        <button type="button" class="glass-btn study-mate-option" data-option-index="1">Rain 🌧️</button>
+        <button type="button" class="glass-btn study-mate-option" data-option-index="2">Cafe ☕</button>
+        <button type="button" class="glass-btn study-mate-option" data-option-index="3">Library 📚</button>
+      </div>
+      <div class="study-mate-player-wrap hidden" id="study-mate-player-wrap">
+        <video id="study-mate-video" playsinline loop></video>
+        <div class="study-mate-controls study-mate-controls-justified">
+          <button type="button" id="study-mate-play-pause-btn" class="glass-btn sm">Pause</button>
+          <button type="button" id="study-mate-mute-btn" class="glass-btn sm">Mute</button>
+          <button type="button" id="study-mate-fullscreen-btn" class="glass-btn sm">Fullscreen</button>
+        </div>
+      </div>
     </div>
-
-    <ul id="todo-list"></ul>
-</section>
-
-
-<section class="card notes-section">
-    <h2>📒 Notes Diary</h2>
-
-    <textarea id="notes-area" placeholder="Write your notes here..."></textarea>
-
-    <div class="notes-actions">
-        <button id="downloadNotesBtn" class="btn primary-btn">💾 Save </button>
-        <button id="clearNotesBtn" class="btn danger-btn">🗑️ Clear</button>
-    </div>
-</section>
-
-        <section class="card sounds-section" id="sounds-section">
-    <h2>🎵 Focus & Relax Sounds</h2>
-
-    <div class="sound-buttons">
-        <button class="btn accent-btn sound-btn" data-sound="audio/rain.mp3">Rain</button>
-        <button class="btn accent-btn sound-btn" data-sound="audio/forest.mp3">Forest</button>
-        <button class="btn accent-btn sound-btn" data-sound="audio/ocean.mp3">Ocean</button>
-        <button class="btn accent-btn sound-btn" data-sound="audio/night.mp3">Night</button>
-        <button class="btn accent-btn sound-btn" data-sound="audio/white-noise.mp3">White Noise</button>
-        <button class="btn accent-btn sound-btn" data-sound="audio/cafe.mp3">Cafe</button>
-    </div>
-
-    <!DOCTYPE html>
-<html>
-<head>
-
-<title>Ambient Sound </title>
-</head>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-color:#ef92a8;
-text-align:center;
-background:linear-gradient(#d79696,#fff9f4);
-background-size:600% 600%;
-animation:bgMove 15s ease infinite;
-overflow-x:hidden;
-}
-
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-h1{
-padding:25px;
-font-size:40px;
-}
-
-.sound-container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-padding:30px;
-}
-
-.sound-card{
-background:#1e293b;
-border-radius:15px;
-padding:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.5);
-transition:0.3s;
-}
-
-.sound-card:hover{
-transform:scale(1.07);
-box-shadow:0 0 20px #22c55e;
-}
-
-.sound-card img{
-width:100%;
-height:150px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.sound-card p{
-margin:10px 0;
-font-weight:bold;
-}
-
-.volume{
-width:100%;
-margin-top:8px;
-}
-
-.playBtn{
-width:100%;
-padding:8px;
-margin-top:8px;
-border:none;
-border-radius:8px;
-background:#22c55e;
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.playBtn:hover{
-background:#16a34a;
-}
-
-
-/* falling leaves */
-
-.leaf{
-position:fixed;
-top:-50px;
-font-size:24px;
-animation:fall linear infinite;
-}
-
-@keyframes fall{
-0%{
-transform:translateY(-50px) rotate(0deg);
-opacity:1;
-}
-100%{
-transform:translateY(100vh) rotate(360deg);
-opacity:0;
-}
-}
-.dashboard {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  align-items: stretch; /* important */
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.sounds-section {
-  max-height: 500px;
-  overflow-y: auto;
-}
-.sound-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-</style>
-
-<h1>🌿 Ambient Sounds</h1>
-
-<div class="sound-container">
-
-<!-- Rain -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1480044965905-02098d419e96?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmlyZHxlbnwwfHwwfHx8MA%3D%3D">
-<p>Birds</p>
-<audio loop>
-<source src="birds.mp3" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Forest -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470">
-<p>Forest</p>
-<audio loop>
-<source src="mixkit-jungle-rain-and-birds-2392.wav" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Ocean -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-<p>Ocean</p>
-<audio loop>
-<source src="rainforest.mp3" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Wind -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-<p>Wind</p>
-<audio loop>
-<source src="mixkit-wind-in-the-top-of-the-mountain-1267.wav" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- rain-->
-<div class="sound-card">
-<img src="rain.jpg" alt="rain">
-<p>Rain</p>
-<audio loop>
-<source src="dragon-studio-gentle-rain-07-437321.mp3" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Nature -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
-<p>Nature</p>
-<audio loop>
-<source src="mixkit-campfire-night-wind-1736.mp3" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Night -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e">
-<p>Night</p>
-<audio loop>
-<source src="hearbeat.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Focus -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534623283-312aade485b7">
-<p>Focus</p>
-<audio loop>
-<source src="kvgarlic.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Space -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
-<p>Space</p>
-<audio loop>
-<source src="light.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Birds -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9">
-<p>Birds</p>
-<audio loop>
-<source src="mantron.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- River -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429">
-<p>River</p>
-<audio loop>
-<source src="morning.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Morning -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534623283-312aade485b7">
-<p>Morning</p>
-<audio loop>
-<source src="nervousneal.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Dream -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-<p>Dream</p>
-<audio loop>
-<source src="otjan.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Zen -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e">
-<p>Zen</p>
-<audio loop>
-<source src="rainforest.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Relax -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429">
-<p>Relax</p>
-<audio loop>
-<source src="scott.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Peace -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e">
-<p>Peace</p>
-<audio loop>
-<source src="storm.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Water -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-<p>Water</p>
-<audio loop>
-<source src="sunset.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-<!-- Universe -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
-<p>Universe</p>
-<audio loop>
-<source src="thunder.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
-
-</div>
-
-<script>
-
-let currentAudio=null;
-
-document.querySelectorAll(".sound-card").forEach(card=>{
-
-const audio=card.querySelector("audio");
-const slider=card.querySelector(".volume");
-const button=card.querySelector(".playBtn");
-
-audio.volume=slider.value;
-
-slider.addEventListener("input",()=>{
-audio.volume=slider.value;
-});
-
-button.onclick=()=>{
-
-if(currentAudio && currentAudio!==audio){
-currentAudio.pause();
-currentAudio.parentElement.querySelector(".playBtn").innerText="Play";
-}
-
-if(audio.paused){
-audio.play();
-button.innerText="Pause";
-currentAudio=audio;
-}else{
-audio.pause();
-button.innerText="Play";
-}
-
-};
-
-});
-
-/* Falling leaves */
-
-function createLeaf(){
-
-let leaf=document.createElement("div");
-leaf.classList.add("leaf");
-leaf.innerHTML="🍃";
-
-leaf.style.left=Math.random()*100+"vw";
-leaf.style.animationDuration=(Math.random()*5+5)+"s";
-
-document.body.appendChild(leaf);
-
-setTimeout(()=>{leaf.remove();},10000);
-
-}
-
-setInterval(createLeaf,600);
-
-</script>
-
-    <div class="volume-control">
-        <label for="volume-slider">Volume</label>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.6">
-    </div>
-
-    <p id="sound-status" class="status-text">Pick a sound to start.</p>
-</section>
-
-<section class="card upload-section" id="upload-section">
-    <h2>📄 AI Study Tools</h2>
-    <p class="support-text">Upload your notes or PDF to generate a summary or quiz!</p>
-
-    <label class="file-upload-label" for="fileInput">
-        <span id="file-label-text">📂 Choose a file (.pdf or .txt)</span>
-        <input type="file" id="fileInput" accept=".pdf,.txt" onchange="handleFileUpload(event)">
-    </label>
-
-    <div id="file-status" class="file-status hidden"></div>
-
-    <div class="ai-buttons">
-        <button class="btn ai-btn" onclick="generateSummary()">📌 Generate Summary</button>
-        <button class="btn ai-btn" onclick="generateQuiz()">🧠 Generate Quiz</button>
-    </div>
-
-    <div id="ai-loader" class="ai-loader hidden">
-        <div class="spinner"></div>
-        <span id="loader-text">Thinking...</span>
-    </div>
-
-    <div id="outputBox"></div>
-</section>
-</main>
-        
-<script src="script.js"></script>   
-        
-
-  
+  </div>
+
+  <script src="userdata.js"></script>
+  <script src="app.js"></script>
+  <script src="calendar.js"></script>
+  <script src="script.js"></script>
+  <script src="flashcards.js"></script>
 </body>
 </html>

@@ -1,373 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
-<title>Ambient Sound Mixer</title>
-
-<style>
-
-body{
-margin:0;
-font-family:Arial;
-color:white;
-text-align:center;
-background:linear-gradient(270deg,#020617,#0f172a,#1e293b);
-background-size:600% 600%;
-animation:bgMove 15s ease infinite;
-overflow-x:hidden;
-}
-
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-h1{
-padding:25px;
-font-size:40px;
-}
-
-.sound-container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-padding:30px;
-}
-
-.sound-card{
-background:#1e293b;
-border-radius:15px;
-padding:15px;
-box-shadow:0 10px 25px rgba(0,0,0,0.5);
-transition:0.3s;
-}
-
-.sound-card:hover{
-transform:scale(1.07);
-box-shadow:0 0 20px #22c55e;
-}
-
-.sound-card img{
-width:100%;
-height:150px;
-object-fit:cover;
-border-radius:10px;
-}
-
-.sound-card p{
-margin:10px 0;
-font-weight:bold;
-}
-
-.volume{
-width:100%;
-margin-top:8px;
-}
-
-.playBtn{
-width:100%;
-padding:8px;
-margin-top:8px;
-border:none;
-border-radius:8px;
-background:#22c55e;
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.playBtn:hover{
-background:#16a34a;
-}
-
-/* falling leaves */
-
-.leaf{
-position:fixed;
-top:-50px;
-font-size:24px;
-animation:fall linear infinite;
-}
-
-@keyframes fall{
-0%{
-transform:translateY(-50px) rotate(0deg);
-opacity:1;
-}
-100%{
-transform:translateY(100vh) rotate(360deg);
-opacity:0;
-}
-}
-
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ambient Sound Mixer – StudySync</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body class="app-body ambient-sound-page">
 
-<body>
+  <h1>🌿 Ambient Sound Mixer</h1>
+  <p class="ambient-subtitle">Mix calming background sounds while you study. One sound plays at a time — adjust volume with the slider.</p>
 
-<h1>🌿 Ambient Sound Mixer</h1>
+  <div class="sound-container-justified" id="sound-container">
 
-<div class="sound-container">
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21" alt="Rain" />
+      <p>Rain</p>
+      <audio loop><source src="birds.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Rain volume" />
+    </div>
 
-<!-- Rain -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500375592092-40eb2168fd21">
-<p>Rain</p>
-<audio loop>
-<source src="birds.mp3" type="audio/mpeg">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470" alt="Forest" />
+      <p>Forest</p>
+      <audio loop><source src="clouds.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Forest volume" />
+    </div>
 
-<!-- Forest -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470">
-<p>Forest</p>
-<audio loop>
-<source src="clouds.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Ocean" />
+      <p>Ocean</p>
+      <audio loop><source src="evening.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Ocean volume" />
+    </div>
 
-<!-- Ocean -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-<p>Ocean</p>
-<audio loop>
-<source src="evening.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="rain.jpg" alt="Wind" onerror="this.src='https://images.unsplash.com/photo-1500530855697-b586d89ba3ee'" />
+      <p>Wind</p>
+      <audio loop><source src="mixkit-wind-blowing-ambience-2658.wav" type="audio/wav" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Wind volume" />
+    </div>
 
-<!-- Wind -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-<p>Wind</p>
-<audio loop>
-<source src="fly away.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94" alt="Thunder" />
+      <audio loop><source src="dragon-studio-gentle-rain-07-437321.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Thunder volume" />
+    </div>
 
-<!-- Thunder -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94">
-<p>Thunder</p>
-<audio loop>
-<source src="ghostrifter.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" alt="Nature" />
+      <p>Nature</p>
+      <audio loop><source src="rainforest.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Nature volume" />
+    </div>
 
-<!-- Nature -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb">
-<p>Nature</p>
-<audio loop>
-<source src="golden.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e" alt="Night" />
+      <p>Night</p>
+      <audio loop><source src="light.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Night volume" />
+    </div>
 
-<!-- Night -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e">
-<p>Night</p>
-<audio loop>
-<source src="hearbeat.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7" alt="Focus" />
+      <p>Focus</p>
+      <audio loop><source src="morning.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Focus volume" />
+    </div>
 
-<!-- Focus -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534623283-312aade485b7">
-<p>Focus</p>
-<audio loop>
-<source src="kvgarlic.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa" alt="Space" />
+      <p>Campfire</p>
+      <audio loop><source src="mixkit-campfire-night-wind-1736.wav" type="audio/wav" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Campfire volume" />
+    </div>
 
-<!-- Space -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
-<p>Space</p>
-<audio loop>
-<source src="light.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9" alt="Birds" />
+      <p>Birds</p>
+      <audio loop><source src="mantron.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Birds volume" />
+    </div>
 
-<!-- Birds -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1502082553048-f009c37129b9">
-<p>Birds</p>
-<audio loop>
-<source src="mantron.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429" alt="River" />
+      <p>Jungle Rain</p>
+      <audio loop><source src="mixkit-jungle-rain-and-birds-2392.wav" type="audio/wav" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Jungle volume" />
+    </div>
 
-<!-- River -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429">
-<p>River</p>
-<audio loop>
-<source src="morning.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7" alt="Morning" />
+      <p>Morning</p>
+      <audio loop><source src="nervousneal.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Morning volume" />
+    </div>
 
-<!-- Morning -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534623283-312aade485b7">
-<p>Morning</p>
-<audio loop>
-<source src="nervousneal.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee" alt="Dream" />
+      <p>Dream</p>
+      <audio loop><source src="otjan.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Dream volume" />
+    </div>
 
-<!-- Dream -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
-<p>Dream</p>
-<audio loop>
-<source src="otjan.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e" alt="Zen" />
+      <p>Zen</p>
+      <audio loop><source src="scott.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Zen volume" />
+    </div>
 
-<!-- Zen -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e">
-<p>Zen</p>
-<audio loop>
-<source src="rainforest.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429" alt="Relax" />
+      <p>Relax</p>
+      <audio loop><source src="evening.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Relax volume" />
+    </div>
 
-<!-- Relax -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429">
-<p>Relax</p>
-<audio loop>
-<source src="scott.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e" alt="Peace" />
+      <p>Peace</p>
+      <audio loop><source src="light.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Peace volume" />
+    </div>
 
-<!-- Peace -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e">
-<p>Peace</p>
-<audio loop>
-<source src="storm.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Gentle Rain" />
+      <p>Gentle Rain</p>
+      <audio loop><source src="dragon-studio-gentle-rain-07-437321.mp3" type="audio/mpeg" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Gentle rain volume" />
+    </div>
 
-<!-- Water -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
-<p>Water</p>
-<audio loop>
-<source src="sunset.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+    <div class="sound-card glass-card">
+      <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa" alt="Mountain Wind" />
+      <p>Mountain Wind</p>
+      <audio loop><source src="mixkit-wind-in-the-top-of-the-mountain-1267.wav" type="audio/wav" /></audio>
+      <button type="button" class="playBtn glass-btn primary sm">Play</button>
+      <input type="range" class="volume" min="0" max="1" step="0.01" value="0.5" aria-label="Mountain wind volume" />
+    </div>
 
-<!-- Universe -->
-<div class="sound-card">
-<img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa">
-<p>Universe</p>
-<audio loop>
-<source src="thunder.mp3">
-</audio>
-<button class="playBtn">Play</button>
-<input type="range" class="volume" min="0" max="1" step="0.01" value="0.5">
-</div>
+  </div>
 
-</div>
+  <p style="text-align:center;margin-top:2rem">
+    <a href="index.html" class="glass-btn sm">← Back to StudySync</a>
+  </p>
 
-<script>
+  <script>
+    let currentAudio = null;
 
-let currentAudio=null;
+    document.querySelectorAll('.sound-card').forEach(card => {
+      const audio = card.querySelector('audio');
+      const slider = card.querySelector('.volume');
+      const button = card.querySelector('.playBtn');
 
-document.querySelectorAll(".sound-card").forEach(card=>{
+      if (!audio || !slider || !button) return;
 
-const audio=card.querySelector("audio");
-const slider=card.querySelector(".volume");
-const button=card.querySelector(".playBtn");
+      audio.volume = parseFloat(slider.value);
 
-audio.volume=slider.value;
+      slider.addEventListener('input', () => {
+        audio.volume = parseFloat(slider.value);
+      });
 
-slider.addEventListener("input",()=>{
-audio.volume=slider.value;
-});
+      button.addEventListener('click', async () => {
+        if (currentAudio && currentAudio !== audio) {
+          currentAudio.pause();
+          const prevBtn = currentAudio.closest('.sound-card')?.querySelector('.playBtn');
+          if (prevBtn) prevBtn.textContent = 'Play';
+        }
 
-button.onclick=()=>{
-
-if(currentAudio && currentAudio!==audio){
-currentAudio.pause();
-currentAudio.parentElement.querySelector(".playBtn").innerText="Play";
-}
-
-if(audio.paused){
-audio.play();
-button.innerText="Pause";
-currentAudio=audio;
-}else{
-audio.pause();
-button.innerText="Play";
-}
-
-};
-
-});
-
-/* Falling leaves */
-
-function createLeaf(){
-
-let leaf=document.createElement("div");
-leaf.classList.add("leaf");
-leaf.innerHTML="🍃";
-
-leaf.style.left=Math.random()*100+"vw";
-leaf.style.animationDuration=(Math.random()*5+5)+"s";
-
-document.body.appendChild(leaf);
-
-setTimeout(()=>{leaf.remove();},10000);
-
-}
-
-setInterval(createLeaf,600);
-
-</script>
-
+        if (audio.paused) {
+          try {
+            await audio.play();
+            button.textContent = 'Pause';
+            currentAudio = audio;
+          } catch (err) {
+            console.error('Audio play failed:', err);
+            button.textContent = 'Play';
+          }
+        } else {
+          audio.pause();
+          button.textContent = 'Play';
+          if (currentAudio === audio) currentAudio = null;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
